@@ -1,0 +1,184 @@
+import scala.annotation.tailrec
+
+
+object Assignment1 {
+  def main(args: Array[String]) {
+
+    val days = List("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Sunday", "Saturday")
+
+    def task1(list: List[String]): Unit = {
+
+      def forLoop(list: List[String]): String = {
+        var finalString = ""
+
+        for ((value, n) <- list.zipWithIndex){
+          finalString += value + (if(n == list.length - 1) "" else ", ")
+        }
+
+        finalString
+      }
+
+      def forLoopWithS(list: List[String]): String = {
+        var finalString = ""
+
+        for ((value, n) <- list.zipWithIndex){
+          if (value(0) == 'S')
+            finalString += value + (if(n == list.length - 1) "" else ", ")
+        }
+
+        finalString
+      }
+
+      def whileLoop(list: List[String]): String = {
+        var finalString = ""
+        var n = 0;
+
+        do {
+          finalString += list(n) + (if(n == list.length - 1) "" else ", ")
+          n += 1
+        } while (n <= list.length - 1)
+
+        finalString
+      }
+
+      println(forLoop(list))
+      println(forLoopWithS(list))
+      println(whileLoop(list))
+    }
+
+    def task2(list: List[String]): Unit = {
+
+      def recursive(list: List[String]): String = list match {
+        case Nil => ""
+        case x :: tail => x + ", " + recursive(tail)
+      }
+
+      println(recursive(list))
+      println(recursive(list.reverse))
+
+    }
+
+    def task3(list: List[String]): Unit = {
+
+      @tailrec
+      def tailRecursive(list: List[String], accum: String): String = {
+        list match {
+          case Nil => accum
+          case x :: tail => tailRecursive(tail, x +  ", " + accum)
+        }
+      }
+
+      println(tailRecursive(list.reverse, ""))
+    }
+
+
+    def task4(list: List[String]): Unit = {
+      println(list.foldLeft("") { (z, i) =>
+        z + ", " + i
+      })
+
+      println(list.foldRight("") { (z, i) =>
+        z + ", " + i
+      })
+
+      println(list.fold("") { (z, i) =>
+        z + ", " + i
+      })
+    }
+    val engineSize = List("Extra Small", "Pretty Small", "Small", "Medium", "Large", "Extra Large")
+
+    def task5(list: List[String]): Unit = {
+
+
+      val map = list.zipWithIndex.map({ case (element, index) =>
+        (element, index + 1.5)
+      }).toMap
+
+      val mapReduced = map.map({case (key, value) => (key, value - (0.1*value))})
+
+
+      println(map)
+      println(mapReduced)
+    }
+
+
+    def task6(list: List[Int]): Unit = {
+
+      def inc(list: List[Int]): List[Int] = {
+        list.map({ case (value) => value + 1})
+      }
+
+
+      println(inc(list))
+    }
+
+
+
+    def task7(list: List[Int]): Unit = {
+
+      def absolute(list: List[Int]): List[Int] = {
+        val newList = list.map(_.abs).filter(n => (n > -5)&&(n < 12))
+
+        return newList
+      }
+
+
+      println(absolute(list))
+    }
+
+    def task8(tuple: (String, Int, Double)): Unit = {
+      println(tuple);
+    }
+
+    def task9(list: List[Int]): Unit = {
+
+      //import tailrec
+      @tailrec
+      def filter(n: Int, l: List[Int], acc: List[Int] = List[Int]()): List[Int] =  l match {
+        case Nil => acc.reverse
+        case hd :: tl if(hd == n) => filter(n, tl, acc)
+        case hd :: tl            => filter(n, tl, hd :: acc)
+      }
+
+      println(filter(0, list))
+    }
+
+
+
+    def task10(): Unit = {
+
+      val cars = Map("Audi" -> "A5", "BMW" -> "E30")
+      cars get "Audi"
+      cars get "Baby Yoda"
+
+
+      def show(x: Option[String]) = x match {
+        case Some(x) => x
+        case None => "?"
+      }
+      def showWithDefault(x: Option[String], default: String) = x match {
+        case Some(x) => x
+        case None => default
+      }
+
+      //task10 output
+      println(show(cars get "Audi"))
+      println(show(cars get "Baby Yoda"))
+      println(show(cars get "BMW"))
+      println(showWithDefault(cars get "Audi", "Not found"))
+      println(showWithDefault(cars get "Baby Yoda", "Not found"))
+      println(showWithDefault(cars get "BMW", "Not found"))
+    }
+
+    task1(days)
+    task2(days)
+    task3(days)
+    task4(days)
+    task5(engineSize)
+    task6(List(1,2,3,4,5))
+    task7(List(-22,-6,-3, 2, 2, 3,22))
+    task8("This is a string", 3, 10.3)
+    task9(List(1, 0, 2, 0, 3, 4, 5, 0, 6, 0, 9))
+    task10()
+  }
+}
